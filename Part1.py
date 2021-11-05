@@ -12,7 +12,7 @@ def greedyOfflineAdWord(budgets, queries, bids):
     # at the start, no one is sold
     sold = np.zeros(m)
 
-    ans = []
+    selected = []
     while(np.sum(bids) > 0):
         (i, j) = unravel_index(bids.argmax(), bids.shape)
 
@@ -20,14 +20,33 @@ def greedyOfflineAdWord(budgets, queries, bids):
             if (0 < bids[i][j] and bids[i][j] <= budgets[i] - M[i]):
                 M[i] += bids[i][j]
                 sold[j] = 1
-                # Report the selected advertiser (if any) for each query with total revenue
-                ans.update({j : i})
+                # Report the  advertiser (if any) for each query with total revenue
+                selected.update({j : i})
 
-    return ans, np.sum(M)
+    return selected, np.sum(M)
 
 
 def naiveLPOfflineAdWord():
 
-    ans = []
+    n = len(budgets)
+    m = len(queries)
 
-    return ans
+    # Initialize M
+    M = np.zeros(n)
+
+    # compute optimal fractional solution
+
+
+
+    selected = []
+    while(np.sum(x) > 0):
+        (i, j) = unravel_index(x.argmax(), x.shape)
+
+        if (sold[j] == 0):
+            if (0 < bids[i][j] and bids[i][j] <= budgets[i] - M[i]):
+                M[i] += bids[i][j]
+                sold[j] = 1
+                # Report the  advertiser (if any) for each query with total revenue
+                selected.update({j : i})
+
+    return selected, np.sum(M)
