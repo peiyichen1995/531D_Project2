@@ -9,5 +9,5 @@
 ### Part 1:
 
 Description:
-- selected bids, total revenue = greedyOfflineAdWord(budgets, queries, bids)
-  selected bids is a dictionary map each query to its selected bid
+- selected, total revenue = greedyOfflineAdWord(budgets, queries, bids)
+  selected is a dictionary map each query to its selected bid
