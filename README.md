@@ -12,3 +12,7 @@ Description:
 - selected, total revenue = greedyOfflineAdWord(budgets, queries, bids)
   
   selected is a dictionary map each query to its selected bid
+
+- selected, total revenue = naiveLPOfflineAdWord(budgets, queries, bids)
+  
+  selected is a dictionary map each query to its selected bid
