@@ -26,7 +26,7 @@ def greedyOfflineAdWord(budgets, queries, bids):
     return selected, np.sum(M)
 
 
-def naiveLPOfflineAdWord():
+def naiveLPOfflineAdWord(budgets, queries, bids):
 
     n = len(budgets)
     m = len(queries)
@@ -35,7 +35,8 @@ def naiveLPOfflineAdWord():
     M = np.zeros(n)
 
     # compute optimal fractional solution
-
+    x0_bounds = (0, None)
+    x1_bounds = (0, None)
 
 
     selected = []
