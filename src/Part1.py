@@ -42,7 +42,8 @@ def naiveLPOfflineAdWord(budgets, queries, bids):
     x1_bounds = (0, None)
 
 
-    selected = []
+    selected = {}
+    dict = sortBids(bids)
     while(np.sum(x) > 0):
         (i, j) = unravel_index(x.argmax(), x.shape)
 

@@ -24,3 +24,7 @@ print("Total revenue: ")
 print(sum_0)
 
 print('==================================================\n')
+
+v = solveLP(budgets_0, queries_0, bids_0)
+print(v)
+# print(names)
