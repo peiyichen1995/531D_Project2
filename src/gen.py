@@ -30,7 +30,7 @@ def ds0_gen(m):
     B -- budget for all advertisers, an integer
     """
 
-    # one advertiser pays 1 for both keywords 
+    # one advertiser pays 1 for both keywords
     #   and one pays 0.5 for only one
     bids = [ [1,1], [0.5,0] ]
 
@@ -94,7 +94,7 @@ def ds2_gen(n,B):
             #   bids 1 on keywords {Bi, ..., B(i+1)-1}
             #   and bids on no other keywords
             bid = zeros*i + ones + zeros*(n-i-1)
-        
+
         else:
             # if i >= n/2, then i-th adveriser
             #   bids 1 on first Bn/2 keywords and {Bi, ..., B(i+1)-1}
@@ -140,7 +140,7 @@ def ds3_gen(n,expo=1,f=1):
     total_degree = 0
 
     for j in range(m):
-        
+
         # get random degree d, 0 < d <= n
         while True:
             g = random.gauss(1,1)
