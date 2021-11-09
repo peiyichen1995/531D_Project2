@@ -51,7 +51,7 @@ def solveLP(budgets, queries, bids):
     Routes = [(w,b) for w in B_names for b in q_names]
 
     # A dictionary called 'Vars' is created to contain the referenced variables(the routes)
-    vars = LpVariable.dicts("Route",(B_names,q_names),0,None,LpInteger)
+    vars = LpVariable.dicts("Route",(B_names,q_names),0,None,cat='Continuous')
 
     # The objective function is added to 'prob' first
     prob += lpSum([vars[w][b]*costs[w][b] for (w,b) in Routes]), "Sum_of_Total_Revenue"
@@ -75,7 +75,8 @@ def solveLP(budgets, queries, bids):
 
     # Each of the variables is printed with it's resolved optimum value
     for v in prob.variables():
-        print (v.name, "=", v.varValue)
+        if (v.varValue != 0):
+            print (v.name, "=", v.varValue)
 
     # The optimised objective function value is printed to the screen
     print ("Total Revenue = ", value(prob.objective))
