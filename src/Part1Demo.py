@@ -40,7 +40,10 @@ def run_exp(file_name, id):
     print("Total revenue: ")
     print(sum)
 
-run_exp('../data/ds0.pkl', 0)
-run_exp('../data/ds1.pkl', 1)
-run_exp('../data/ds2.pkl', 2)
+# budgets, queries, bids = readData('../data/ds0.pkl')
+# print(bids)
+
+# run_exp('../data/ds0.pkl', 0)
+# run_exp('../data/ds1.pkl', 1)
+# run_exp('../data/ds2.pkl', 2)
 run_exp('../data/ds3.pkl', 3)

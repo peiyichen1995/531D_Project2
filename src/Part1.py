@@ -19,12 +19,20 @@ def greedyOfflineAdWord(budgets, queries, bids):
             i = dict[k][1][l][0]
             j = dict[k][1][l][1]
 
-            if (sold[j] == 0):
-                if (0 < bids[i][j] and bids[i][j] <= budgets[i] - M[i]):
-                    M[i] += bids[i][j]
-                    sold[j] = 1
-                    # Report the  advertiser (if any) for each query with total revenue
-                    selected[j] = i
+            # j = queries[t], find all t here
+            ts = np.where(queries == j)
+            ts = ts[0]
+            for t in ts:
+                # print(t)
+                if (sold[t] == 0):
+                    if (0 < bids[i][j] and bids[i][j] <= budgets[i] - M[i]):
+                        M[i] += bids[i][j]
+                        sold[t] = 1
+                        # Report the  advertiser (if any) for each query with total revenue
+                        if i in selected:
+                            selected[i].append(t)
+                        else:
+                            selected[i] = [t]
 
     return selected, np.sum(M)
 
@@ -46,6 +54,7 @@ def naiveLPOfflineAdWord(budgets, queries, bids):
     dict = solveLP(budgets, queries, bids)
     print("----------------------------------------------------")
 
+    # print(dict)
 
     # selected = {}
     # dict = sortBids(bids)
@@ -63,14 +72,19 @@ def naiveLPOfflineAdWord(budgets, queries, bids):
     for k in range(len(dict)-1, -1, -1):
         for l in range(len(dict[k][1])):
             i = dict[k][1][l][0]
-            j = dict[k][1][l][1]
+            t = dict[k][1][l][1]
 
-            if (sold[j] == 0):
+            j = queries[t]
+
+            if (sold[t] == 0):
                 if (0 < bids[i][j] and bids[i][j] <= budgets[i] - M[i]):
                     M[i] += bids[i][j]
-                    sold[j] = 1
+                    sold[t] = 1
                     # Report the  advertiser (if any) for each query with total revenue
-                    selected[j] = i
+                    if i in selected:
+                        selected[i].append(t)
+                    else:
+                        selected[i] = [t]
 
 
     return selected, np.sum(M)

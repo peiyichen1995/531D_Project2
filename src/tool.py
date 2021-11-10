@@ -41,8 +41,15 @@ def solveLP(budgets, queries, bids):
         q_names.append(str(i))
         qs[str(i)] = queries[i]
 
+    n = len(budgets)
+    m = len(queries)
+    t_bids = np.zeros((n, m))
+    for i in range(len(budgets)):
+        for t in range(len(queries)):
+            t_bids[i][t] = bids[i][queries[t]]
+
     # The bids data is made into a dictionary
-    costs = makeDict([B_names,q_names],bids,0)
+    costs = makeDict([B_names,q_names],t_bids,0)
 
     # Creates the 'prob' variable to contain the problem data
     prob = LpProblem("AdWord Problem",LpMaximize)
@@ -77,7 +84,7 @@ def solveLP(budgets, queries, bids):
     # Each of the variables is printed with it's resolved optimum value
     for v in prob.variables():
         if (v.varValue != 0):
-            print (v.name, "=", v.varValue)
+            # print (v.name, "=", v.varValue)
             name_split = (v.name).split('_')
             if (v.varValue in frac_x):
                 frac_x[v.varValue].append([int(name_split[1][1:]), int(name_split[2])])
