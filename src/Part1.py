@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.optimize import linprog
 from tool import *
 
 def greedyOfflineAdWord(budgets, queries, bids):

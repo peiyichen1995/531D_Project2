@@ -1,6 +1,8 @@
 import numpy as np
 from numpy import unravel_index
 import math
+from tool import *
+
 
 # input: 
 # budgets: a (n,) ndarray
@@ -42,7 +44,7 @@ def greedyOnlineAdWord(budgets, queries, bids):
             M[imax]+=bids[imax][j]
         #else no feasible solution for this query
         t+=1
-    return selected, np.sum(M)
+    return selected, np.sum(M), M
 
 def weightedgreedyOnlineAdWord(budgets, queries, bids):
     n=len(budgets)
@@ -79,3 +81,45 @@ def weightedgreedyOnlineAdWord(budgets, queries, bids):
         t+=1
     return selected, np.sum(M)   
 
+def LPOnlineAdWord(budgets, queries, bids, e):
+
+    n = len(budgets)
+    m = len(queries)
+
+    # Initialize M
+    t=int(e*m)
+    pre_queries = queries[0:t]
+    _,_,M = greedyOnlineAdWord(budgets, pre_queries, bids)
+    print(np.sum(M))
+    print("Compute an optimal fractional solution alpha*,beta* to the LP")
+    print("----------------------------------------------------")
+    # compute optimal fractional solution
+    alpha = solveDualLP(budgets, pre_queries, bids, e)
+    print("----------------------------------------------------")
+    
+    selected={}
+    # the timestamp is from 0 to m-1
+    t+=1
+    while t < m :
+        j=queries[t]
+        bidsmax=-1
+        imax=-1
+        for i in range(n):
+            if(bids[i][j]==0):
+                continue
+            #choose the maximum weighted bids
+            if(budgets[i]-M[i]>=bids[i][j]):
+                if(bidsmax < (1-alpha[i])*bids[i][j]):
+                    imax = i
+                    bidsmax = (1-alpha[i])*bids[i][j]
+        # exists a feasible matching for the t-th query
+        if(imax != -1):
+            if(imax in selected):
+                selected[imax].append(t)
+            else:
+                selected[imax]=[t]
+            M[imax]+=bids[imax][j]
+        #else no feasible solution for this query
+        t+=1
+    print(np.sum(M))
+    return selected, np.sum(M)

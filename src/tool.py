@@ -39,7 +39,7 @@ def solveLP(budgets, queries, bids):
     # Creates a list of all queries
     for i in range(len(queries)):
         q_names.append(str(i))
-        qs[str(i)] = queries[i]
+        qs[str(i)] = str(queries[i])
 
     # The bids data is made into a dictionary
     costs = makeDict([B_names,q_names],bids,0)
@@ -54,11 +54,11 @@ def solveLP(budgets, queries, bids):
     vars = LpVariable.dicts("Route",(B_names,q_names),0,None,cat='Continuous')
 
     # The objective function is added to 'prob' first
-    prob += lpSum([vars[w][b]*costs[w][b] for (w,b) in Routes]), "Sum_of_Total_Revenue"
+    prob += lpSum([vars[w][b]*costs[w][qs[b]] for (w,b) in Routes]), "Sum_of_Total_Revenue"
 
     # The supply maximum constraints are added to prob for each supply node (warehouse)
     for w in B_names:
-        prob += lpSum([vars[w][b]*costs[w][b] for b in q_names])<=Bs[w], "Sum_of_Products_out_of_Budget_%s"%w
+        prob += lpSum([vars[w][b]*costs[w][qs[b]] for b in q_names])<=Bs[w], "Sum_of_Products_out_of_Budget_%s"%w
 
     # The demand minimum constraints are added to prob for each demand node (bar)
     for b in q_names:
@@ -88,3 +88,61 @@ def solveLP(budgets, queries, bids):
     print ("Total Revenue = ", value(prob.objective))
 
     return sorted(frac_x.items())
+
+def solveDualLP(budgets, queries, bids, e):
+    # create a list of all the budgets
+    # Creates a dictionary for the number of units of budget for each budgets
+    B_names = []
+    Bs = {}
+    for i in range(len(budgets)):
+        B_names.append("B"+str(i))
+        Bs["B"+str(i)] = budgets[i]
+
+    q_names = []
+    qs = {}
+    # Creates a list of all queries
+    for i in range(len(queries)):
+        q_names.append(str(i))
+        qs[str(i)] = str(queries[i])
+    # The bids data is made into a dictionary
+    costs = makeDict([B_names,q_names],bids,0)
+
+    # Creates the 'prob' variable to contain the problem data
+    prob = LpProblem("AdWord Dual Problem",LpMinimize)
+
+   
+
+    # Dictionary called alpha and beta are created to contain the referenced variables(the routes)
+    alpha = LpVariable.dicts("alpha",(B_names),0,None,cat='Continuous')
+    beta = LpVariable.dicts("beta",(q_names),0,None,cat='Continuous')
+
+    # The objective function is added to 'prob' first
+    prob += (lpSum([e*alpha[w]*Bs[w] for w in B_names]+[beta[b] for b in q_names])), "Dual"
+
+    # Creates a list of tuples containing all the possible routes for transport
+    Routes = [(w,b) for w in B_names for b in q_names]
+    for (w,b) in Routes:
+        # w=r[0],b=r[1]
+        prob += alpha[w]*costs[w][qs[b]]+beta[b]>=costs[w][qs[b]], "Constraint (%s,%s)"%(w,b)
+
+    # The problem data is written to an .lp file
+    prob.writeLP("AdWordProblem.lp")
+
+    # The problem is solved using PuLP's choice of Solver
+    prob.solve()
+
+    # The status of the solution is printed to the screen
+    print( "Status:", LpStatus[prob.status])
+    
+    # Each of the variables is printed with it's resolved optimum value
+    res=[]
+    for v in prob.variables():
+        if (v.varValue != 0):
+            name_split = (v.name).split('_')
+            print (v.name, "=", v.varValue)
+            if(name_split[0]=="alpha"):
+                
+                res.append(v.varValue)
+    print ("Total Revenue = ", value(prob.objective))
+
+    return res
