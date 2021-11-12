@@ -61,11 +61,11 @@ def solveLP(budgets, queries, bids):
     vars = LpVariable.dicts("Route",(B_names,q_names),0,None,cat='Continuous')
 
     # The objective function is added to 'prob' first
-    prob += lpSum([vars[w][b]*costs[w][qs[b]] for (w,b) in Routes]), "Sum_of_Total_Revenue"
+    prob += lpSum([vars[w][b]*costs[w][b] for (w,b) in Routes]), "Sum_of_Total_Revenue"
 
     # The supply maximum constraints are added to prob for each supply node (warehouse)
     for w in B_names:
-        prob += lpSum([vars[w][b]*costs[w][qs[b]] for b in q_names])<=Bs[w], "Sum_of_Products_out_of_Budget_%s"%w
+        prob += lpSum([vars[w][b]*costs[w][b] for b in q_names])<=Bs[w], "Sum_of_Products_out_of_Budget_%s"%w
 
     # The demand minimum constraints are added to prob for each demand node (bar)
     for b in q_names:
@@ -99,15 +99,17 @@ def solveLP(budgets, queries, bids):
 def solveDualLP(budgets, queries, bids, e):
     # create a list of all the budgets
     # Creates a dictionary for the number of units of budget for each budgets
+    n = len(budgets)
     B_names = []
     Bs = {}
     for i in range(len(budgets)):
-        B_names.append("B"+str(i))
-        Bs["B"+str(i)] = budgets[i]
+        B_names.append(str(i))
+        Bs[str(i)] = budgets[i]
 
     q_names = []
     qs = {}
     # Creates a list of all queries
+    
     for i in range(len(queries)):
         q_names.append(str(i))
         qs[str(i)] = str(queries[i])
@@ -142,14 +144,13 @@ def solveDualLP(budgets, queries, bids, e):
     print( "Status:", LpStatus[prob.status])
     
     # Each of the variables is printed with it's resolved optimum value
-    res=[]
+    res=np.zeros(n)
     for v in prob.variables():
         if (v.varValue != 0):
             name_split = (v.name).split('_')
-            print (v.name, "=", v.varValue)
+            
             if(name_split[0]=="alpha"):
-                
-                res.append(v.varValue)
-    print ("Total Revenue = ", value(prob.objective))
+                print (v.name, "=", v.varValue)
+                res[int(name_split[1])]=v.varValue
 
     return res
