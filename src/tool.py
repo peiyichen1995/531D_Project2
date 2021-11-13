@@ -39,7 +39,7 @@ def solveLP(budgets, queries, bids):
     # Creates a list of all queries
     for i in range(len(queries)):
         q_names.append(str(i))
-        qs[str(i)] = queries[i]
+        qs[str(i)] = str(queries[i])
 
     # update the bids for w_it, note that j = queries[t]
     n = len(budgets)
@@ -96,3 +96,62 @@ def solveLP(budgets, queries, bids):
     print ("Total Revenue = ", value(prob.objective))
 
     return sorted(frac_x.items())
+
+def solveDualLP(budgets, queries, bids, e):
+    # create a list of all the budgets
+    # Creates a dictionary for the number of units of budget for each budgets
+    n = len(budgets)
+    B_names = []
+    Bs = {}
+    for i in range(len(budgets)):
+        B_names.append(str(i))
+        Bs[str(i)] = budgets[i]
+
+    q_names = []
+    qs = {}
+    # Creates a list of all queries
+    
+    for i in range(len(queries)):
+        q_names.append(str(i))
+        qs[str(i)] = str(queries[i])
+    # The bids data is made into a dictionary
+    costs = makeDict([B_names,q_names],bids,0)
+
+    # Creates the 'prob' variable to contain the problem data
+    prob = LpProblem("AdWord Dual Problem",LpMinimize)
+
+   
+
+    # Dictionary called alpha and beta are created to contain the referenced variables(the routes)
+    alpha = LpVariable.dicts("alpha",(B_names),0,None,cat='Continuous')
+    beta = LpVariable.dicts("beta",(q_names),0,None,cat='Continuous')
+
+    # The objective function is added to 'prob' first
+    prob += (lpSum([e*alpha[w]*Bs[w] for w in B_names]+[beta[b] for b in q_names])), "Dual"
+
+    # Creates a list of tuples containing all the possible routes for transport
+    Routes = [(w,b) for w in B_names for b in q_names]
+    for (w,b) in Routes:
+        # w=r[0],b=r[1]
+        prob += alpha[w]*costs[w][qs[b]]+beta[b]>=costs[w][qs[b]], "Constraint (%s,%s)"%(w,b)
+
+    # The problem data is written to an .lp file
+    prob.writeLP("AdWordProblem.lp")
+
+    # The problem is solved using PuLP's choice of Solver
+    prob.solve()
+
+    # The status of the solution is printed to the screen
+    print( "Status:", LpStatus[prob.status])
+    
+    # Each of the variables is printed with it's resolved optimum value
+    res=np.zeros(n)
+    for v in prob.variables():
+        if (v.varValue != 0):
+            name_split = (v.name).split('_')
+            
+            if(name_split[0]=="alpha"):
+                print (v.name, "=", v.varValue)
+                res[int(name_split[1])]=v.varValue
+
+    return res
