@@ -1,5 +1,12 @@
 from Part1 import *
 
+# print the selected bids for AdWord problem
+def printSelectedBids(selected):
+    for key in selected:
+        print("Budget " + str(key) + ":")
+        print(selected[key])
+        print('\n')
+
 def run_exp(file_name, id):
     print("Run each offline algorithm on the four provided datasets "+str(id)+":\n")
 
@@ -7,11 +14,11 @@ def run_exp(file_name, id):
     print('==================================================\n')
 
     budgets, queries, bids = readData(file_name)
-    print("Budget 0: ")
+    print("Budget " + str(id) +":")
     print(budgets)
-    print("Queries 0: ")
+    print("Queries " + str(id) +":")
     print(queries)
-    print("Bids 0: ")
+    print("Bids " + str(id) +":")
     print(bids)
 
     print('\n')
@@ -21,7 +28,7 @@ def run_exp(file_name, id):
     selected, sum = greedyOfflineAdWord(budgets, queries, bids)
 
     print("Selected advertiser (if any) for each query: (query: selected advertiser)")
-    print(selected)
+    printSelectedBids(selected)
     print('\n')
     print("Total revenue: ")
     print(sum)
@@ -35,7 +42,7 @@ def run_exp(file_name, id):
 
     print('\n')
     print("Selected advertiser (if any) for each query: (query: selected advertiser)")
-    print(selected)
+    printSelectedBids(selected)
     print('\n')
     print("Total revenue: ")
     print(sum)
@@ -43,7 +50,7 @@ def run_exp(file_name, id):
 # budgets, queries, bids = readData('../data/ds0.pkl')
 # print(bids)
 
-# run_exp('../data/ds0.pkl', 0)
+run_exp('../data/ds0.pkl', 0)
 # run_exp('../data/ds1.pkl', 1)
 # run_exp('../data/ds2.pkl', 2)
-run_exp('../data/ds3.pkl', 3)
+# run_exp('../data/ds3.pkl', 3)

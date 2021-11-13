@@ -13,6 +13,8 @@ def greedyOfflineAdWord(budgets, queries, bids):
     sold = np.zeros(m)
 
     selected = {}
+    # save bids as dictionary where key is w_ij(t), and the values are pair of {i, j(t)}
+    # sort the bids
     dict = sortBids(bids)
     for k in range(len(dict)-1, -1, -1):
         for l in range(len(dict[k][1])):

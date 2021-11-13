@@ -41,6 +41,7 @@ def solveLP(budgets, queries, bids):
         q_names.append(str(i))
         qs[str(i)] = queries[i]
 
+    # update the bids for w_it, note that j = queries[t]
     n = len(budgets)
     m = len(queries)
     t_bids = np.zeros((n, m))
@@ -63,11 +64,11 @@ def solveLP(budgets, queries, bids):
     # The objective function is added to 'prob' first
     prob += lpSum([vars[w][b]*costs[w][b] for (w,b) in Routes]), "Sum_of_Total_Revenue"
 
-    # The supply maximum constraints are added to prob for each supply node (warehouse)
+    # second constraint
     for w in B_names:
         prob += lpSum([vars[w][b]*costs[w][b] for b in q_names])<=Bs[w], "Sum_of_Products_out_of_Budget_%s"%w
 
-    # The demand minimum constraints are added to prob for each demand node (bar)
+    # first constraint
     for b in q_names:
         prob += lpSum([vars[w][b] for w in B_names])<=1, "Sum_of_Bids_into_Query%s"%b
 
@@ -78,7 +79,7 @@ def solveLP(budgets, queries, bids):
     prob.solve()
 
     # The status of the solution is printed to the screen
-    print( "Status:", LpStatus[prob.status])
+    # print( "Status:", LpStatus[prob.status])
 
     frac_x = {}
     # Each of the variables is printed with it's resolved optimum value
