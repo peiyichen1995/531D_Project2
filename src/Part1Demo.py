@@ -1,4 +1,5 @@
 from Part1 import *
+from gen import *
 
 # print the selected bids for AdWord problem
 def printSelectedBids(selected):
@@ -7,18 +8,19 @@ def printSelectedBids(selected):
         print(selected[key])
         print('\n')
 
+# run experiment
 def run_exp(file_name, id):
-    print("Run each offline algorithm on the four provided datasets "+str(id)+":\n")
+    print("Run each offline algorithm on the four provided datasets "+id+":\n")
 
     print('==================================================')
     print('==================================================\n')
 
     budgets, queries, bids = readData(file_name)
-    print("Budget " + str(id) +":")
+    print("Budget " + id +":")
     print(budgets)
-    print("Queries " + str(id) +":")
+    print("Queries " + id +":")
     print(queries)
-    print("Bids " + str(id) +":")
+    print("Bids " + id +":")
     print(bids)
 
     print('\n')
@@ -50,7 +52,14 @@ def run_exp(file_name, id):
 # budgets, queries, bids = readData('../data/ds0.pkl')
 # print(bids)
 
-run_exp('../data/ds0.pkl', 0)
-# run_exp('../data/ds1.pkl', 1)
-# run_exp('../data/ds2.pkl', 2)
-# run_exp('../data/ds3.pkl', 3)
+print("================================= Showcase for part A ========================================")
+ds_exp = ds0_gen(2)
+dump('../data/ds_exp', ds_exp)
+run_exp('../data/ds_exp.pkl', 'showcase')
+
+print("================ Run each offline algorithm on the four provided datasets ==================")
+
+run_exp('../data/ds0.pkl', '0')
+run_exp('../data/ds1.pkl', '1')
+run_exp('../data/ds2.pkl', '2')
+run_exp('../data/ds3.pkl', '3')
