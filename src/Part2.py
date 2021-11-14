@@ -130,3 +130,13 @@ def LPOnlineAdWord(budgets, queries, bids, e):
         t+=1
 
     return selected, np.sum(M)
+
+def randomShuffling(ds,AdwordFun):
+    revenues=np.zeros(100)
+    budgets, queries, bids=readData(ds)
+    for i in range(100):
+        np.random.shuffle(queries)
+        revenues[i]=AdwordFun(budgets, queries, bids)[1]
+    rev_average=np.average(revenues)
+    rev_std=np.std(revenues)
+    return rev_average,rev_std
