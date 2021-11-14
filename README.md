@@ -24,6 +24,10 @@ Description:
   * selected: a list of queries matched to i-th adverisers, below is a key-value example:
   * i : [q1,q2,q3], [q1,q2,q3] is a list of queries matched to i-th adverisers 
 
+Usage:
+- from Part1 import *
+- Run 'python Part1Demo.py' for slides results
+
 ### Part 2:
 
 Description:
