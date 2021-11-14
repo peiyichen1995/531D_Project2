@@ -18,8 +18,11 @@ Description:
   * i : [q1,q2,q3], [q1,q2,q3] is a list of queries matched to i-th adverisers 
 
 - selected, total revenue = naiveLPOfflineAdWord(budgets, queries, bids)
-
-  selected is a dictionary map each query to its selected bid
+  * budgets is a one-dimensional ndarray, shape(n,)
+  * queries is  a one-dimensional ndarray, shape(m,)
+  * bids is a two-dimensional ndarray, shape(n,r)
+  * selected: a list of queries matched to i-th adverisers, below is a key-value example:
+  * i : [q1,q2,q3], [q1,q2,q3] is a list of queries matched to i-th adverisers 
 
 ### Part 2:
 
