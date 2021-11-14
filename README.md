@@ -6,6 +6,7 @@
 - scipy.optimize
 - matplotlib.pyplot
 - math
+- pulp
 
 ### Part 1:
 
