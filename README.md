@@ -45,10 +45,11 @@ Description:
   - bids is a two-dimensional ndarray, shape(n,r)
   - selected: a list of queries matched to i-th adverisers, below is a key-value example:
   - i : [q1,q2,q3], [q1,q2,q3] is a list of queries matched to i-th adverisers
-* total revenue = LPOnlineAdWord(budgets, queries, bids, e)
+* selected, total revenue = LPOnlineAdWord(budgets, queries, bids, e)
   - budgets is a one-dimensional ndarray, shape(n,)
   - queries is  a one-dimensional ndarray, shape(m,)
   - bids is a two-dimensional ndarray, shape(n,r)
+  - selected: a list of queries matched to i-th adverisers
   - e is a threshold for learning process
 
 ### Part 3:
@@ -56,7 +57,7 @@ Description:
   - budgets is a one-dimensional ndarray, shape(n,)
   - queries is  a one-dimensional ndarray, shape(m,)
   - bids is a two-dimensional ndarray, shape(n,r)
-  - selected: a list of queries matched to i-th adverisers, below is a key-value example:
+  - selected: a list of queries matched to i-th adverisers
   - e is a threshold. Before e, it is the same as weighted-online learning. After e, it choose based on bid.
 * total revenue = extension4(budgets, queries, bids, threshold):
   - budgets is a one-dimensional ndarray, shape(n,)
