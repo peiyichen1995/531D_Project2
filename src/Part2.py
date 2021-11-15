@@ -129,4 +129,4 @@ def LPOnlineAdWord(budgets, queries, bids, e):
         #else no feasible solution for this query
         t+=1
 
-    return selected, np.sum(M)
+    return np.sum(M)

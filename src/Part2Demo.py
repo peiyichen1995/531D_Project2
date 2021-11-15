@@ -1,7 +1,37 @@
-import Part2,Part1
+import Part2
 import tool
-budgets, queries, bids=tool.readData('../data/ds1.pkl')
-print(budgets.shape,queries.shape,bids)
-temp=Part2.LPOnlineAdWord(budgets, queries, bids,0.5)
-print(temp[1])
-print(Part2.greedyOnlineAdWord(budgets, queries, bids)[1])
+import numpy as np
+
+def randomShuffling(ds,AdwordFun,e):
+    revenues=np.zeros(100)
+    budgets, queries, bids=tool.readData(ds)
+    for i in range(100):
+        np.random.shuffle(queries)
+        revenues[i]=AdwordFun(budgets, queries, bids,e)
+    rev_average=np.average(revenues)
+    rev_std=np.std(revenues)
+    return rev_average,rev_std
+
+
+def test100():
+    res=[]
+    for e in [0.05,0.1,0.2]:
+        
+        res.append(randomShuffling('../data/ds0.pkl', Part2.LPOnlineAdWord, e))
+        res.append(randomShuffling('../data/ds1.pkl', Part2.LPOnlineAdWord, e))
+        res.append(randomShuffling('../data/ds2.pkl', Part2.LPOnlineAdWord, e))
+        res.append(randomShuffling('../data/ds3.pkl', Part2.LPOnlineAdWord, e))
+    print(res)
+# randomShuffling('../data/ds1.pkl', Part2.LPOnlineAdWord)
+res=[]
+for e in [0.05,0.1,0.2]:
+    
+    budgets, queries, bids=tool.readData('../data/ds0.pkl')
+    res.append(Part2.LPOnlineAdWord(budgets, queries, bids,e))
+    budgets, queries, bids=tool.readData('../data/ds1.pkl')
+    res.append(Part2.LPOnlineAdWord(budgets, queries, bids,e))
+    budgets, queries, bids=tool.readData('../data/ds2.pkl')
+    res.append(Part2.LPOnlineAdWord(budgets, queries, bids,e))
+    budgets, queries, bids=tool.readData('../data/ds3.pkl')
+    res.append(Part2.LPOnlineAdWord(budgets, queries, bids,e))
+print(res)
