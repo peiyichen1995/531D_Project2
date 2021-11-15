@@ -50,5 +50,4 @@ Description:
 
 * budgets,queries,bids=readData(file)
   * budgets,queries,bids are ndarrays
-  * this function is suitable for ds0-ds2
 
