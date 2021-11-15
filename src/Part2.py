@@ -89,7 +89,7 @@ def LPOnlineAdWord(budgets, queries, bids, e):
     # Initialize M
     t=int(e*m)
     pre_queries = queries[0:t]
-    _,_,M = greedyOnlineAdWord(budgets, pre_queries, bids)
+    selected,_,M = greedyOnlineAdWord(budgets, pre_queries, bids)
 
     print("Compute an optimal fractional solution alpha*,beta* to the LP")
     print("----------------------------------------------------")
@@ -97,7 +97,6 @@ def LPOnlineAdWord(budgets, queries, bids, e):
     alpha = solveDualLP(budgets, pre_queries, bids, e)
     print("----------------------------------------------------")
     
-    selected={}
     # the timestamp is from 0 to m-1
     t+=1
     while t < m :
@@ -129,4 +128,4 @@ def LPOnlineAdWord(budgets, queries, bids, e):
         #else no feasible solution for this query
         t+=1
 
-    return np.sum(M)
+    return selected,np.sum(M)
